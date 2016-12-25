@@ -86,12 +86,12 @@
 
 <meta name="description" content="Stay hungry">
 <meta property="og:type" content="website">
-<meta property="og:title" content="三米的博客">
+<meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="三米的博客">
+<meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Stay hungry">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="三米的博客">
+<meta name="twitter:title" content="Hexo">
 <meta name="twitter:description" content="Stay hungry">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title> 三米的博客 </title>
+  <title> Hexo </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -159,7 +159,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">三米的博客</span>
+      <span class="site-title">Hexo</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -250,9 +250,9 @@
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -353,158 +353,18 @@
       
         
           
-            <h2 id="PAT甲级-1014-思路总结"><a href="#PAT甲级-1014-思路总结" class="headerlink" title="PAT甲级 1014 思路总结"></a>PAT甲级 1014 思路总结</h2><p><a href="https://www.patest.cn/contests/pat-a-practise/1014" target="_blank" rel="external">原题链接</a></p>
-<h3 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h3><ul>
-<li>黄线以内有空位时，后续客户依次进入，直到黄线内区域已满（或已无后续客户），则进入下一步。</li>
-<li>vector<queue<pair<int,int>&gt;&gt; 用来存储银行窗口排队的情况，每次选择每个窗口的最前面的目前需要服务时间最短的客户，让其处理完毕（可能有多个），纪录该序号客户处理完毕的时间（f_service），并更新其它窗口的队头客户所需服务时间。</queue<pair<int,int></li>
-<li>输出时间时需要按照题目所需格式。</li>
-<li>注意17:00开始不再处理新业务，当已经在处理中的客户要处理完毕。</li>
-</ul>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;queue&gt;
-#include &lt;climits&gt;
-
-#define WORK_TIME 9
-
-using namespace std;
-
-//检查目前的各窗口的黄线区域内是否有新的排队空间
-bool check_in(vector&lt;queue&lt;pair&lt;int,int&gt;&gt;&gt;&amp; window,int M){ 
-    for (int i=0; i&lt;window.size(); ++i) {
-
-        if (window[i].size()&lt;M) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//黄线区域内是否每个窗口都无人排队
-bool check_in_all(vector&lt;queue&lt;pair&lt;int,int&gt;&gt;&gt;&amp; window,int M){
-    for (int i=0; i&lt;window.size(); ++i) {
-
-        if (window[i].size()&gt;0) {
-            return false;
-        }
-    }
-    return true;
-}
-
- //序号为num的客户进入黄线排队
-void yellow_in(vector&lt;queue&lt;pair&lt;int,int&gt;&gt;&gt;&amp; window,vector&lt;int&gt;&amp; vec,int num,int M){
-    int sequence=INT_MAX;
-    int count=0;
-    for (int i=0; i&lt;window.size(); ++i) {
-
-        if (window[i].size()&lt;sequence) {
-            sequence=window[i].size();
-            count=i;
-        }
-    }
-    window[count].push(make_pair(num, vec[num]));
-    //cout&lt;&lt;&quot;window &quot;&lt;&lt;sequence&lt;&lt;&quot; &quot;&lt;&lt;window[sequence].size();
-}
-
-//目前各窗口排队队头需要处理时间最小的客户让其处理完毕，并更新其它窗口的情况
-int process_shortest_serviece(vector&lt;queue&lt;pair&lt;int,int&gt;&gt;&gt;&amp; window,vector&lt;int&gt;&amp; f_service,int &amp;out,int max,int time){
-    int min=INT_MAX;
-    for (int i=0; i&lt;window.size(); ++i) {
-        if (window[i].size() == 0) {
-            continue;
-        }
-        if (window[i].front().second&lt;min) {
-            min=window[i].front().second;
-        }
-    }
-
-    time=time+min;
-
-    for (int i=0; i&lt;window.size(); ++i) {
-        if (window[i].size() == 0) {
-            continue;
-        }
-        if (window[i].front().second == min) {
-            if (window[i].front().first&gt;max) {
-                out=1;
-            }
-            f_service[window[i].front().first]=time;
-            window[i].pop();
-            if (time&gt;=540) {
-                while (!window[i].empty()) {
-                    window[i].pop();
-                }
-            }
-        }else{
-            window[i].front().second -= min;
-        }
-    }
-    return min;
-}
-
-//按照题目要求输出时间
-void adapter(int time){
-
-    if (time == 0) {
-        cout&lt;&lt;&quot;Sorry&quot;;
-    }else{
-        if (time/60&lt;2) {
-            cout&lt;&lt;&quot;0&quot;;
-        }
-        cout&lt;&lt;time/60+8&lt;&lt;&quot;:&quot;;
-
-        if (time%60&lt;10) {
-            cout&lt;&lt;&quot;0&quot;;
-        }
-        cout&lt;&lt;time%60;
-    }
-}
-
-int main(){
-    int N=0,M=0,K=0,Q=0;
-    cin&gt;&gt;N&gt;&gt;M&gt;&gt;K&gt;&gt;Q;
-    vector&lt;int&gt; p_time(K+1,0);
-    for (int i=1; i &lt;= K; ++i) {
-        cin&gt;&gt;p_time[i];
-    }
-    vector&lt;int&gt; f_service(K+1,0);
-    vector&lt;int&gt; query(Q+1,0);
-    int max_query=0;
-    for(int i=1;i &lt;= Q;++i){
-        cin&gt;&gt;query[i];
-        if (query[i]&gt;max_query) max_query=query[i];
-    }
-
-    vector&lt;queue&lt;pair&lt;int,int&gt;&gt;&gt; window(N,queue&lt;pair&lt;int,int&gt;&gt;()); //各窗口队列
-    int time=0;//总时间
-    int num=1;
-    while (1) {
-        while(check_in(window,M)){
-            //cout&lt;&lt;window[0].size()&lt;&lt;&quot; &quot;&lt;&lt;window[1].size()&lt;&lt;endl;
-            if (num &lt;= K &amp;&amp; time&lt;WORK_TIME*60){
-                yellow_in(window,p_time,num++,M);
-            }else{
-                break;
-            }
-        }
-        int out=0;
-        int increment=process_shortest_serviece(window,f_service,out,max_query,time);//可能处理多个窗口,处理完窗口就有空额,并纪录每个处理完客户的时间（分钟表示）
-
-        if (check_in_all(window, M) || out) {
-            break;
-        }
-        time+=increment;
-    }
-    for (int i=1; i &lt;= Q; ++i) {
-        adapter(f_service[query[i]]);
-        if (i&lt;Q) {
-            cout&lt;&lt;endl;
-        }
-    }
-    return 0;
-}
-</code></pre>
-          
+          PAT甲级 1014 思路总结原题链接
+主要思路
+黄线以内有空位时，后续客户依次进入，直到黄线内区域已满（或已无后续客户），则进入下一步。
+vector&gt;&gt; 用来存储银行窗口排队的情况，每次选择每个窗口的最前面的目前需要服务时间最短的客户，让其处理完毕（可能有多个），纪录该序号客户处理完
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/25/PAT甲级1014/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -550,9 +410,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -653,147 +513,18 @@ int main(){
       
         
           
-            <h2 id="PAT甲级-1016-思路总结"><a href="#PAT甲级-1016-思路总结" class="headerlink" title="PAT甲级 1016 思路总结"></a>PAT甲级 1016 思路总结</h2><p><a href="https://www.patest.cn/contests/pat-a-practise/1016" target="_blank" rel="external">原题链接</a></p>
-<h3 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h3><ul>
-<li>输入可以按自己的要求改为更简单的形式，此题就把 on-line off-line改为bool类型存储</li>
-<li>每一条电话记录包括用户姓名，时间，状态，我按照时间来进行排序，并同步更新姓名和状态的vector，即最终下标对应的姓名，时间，状态在排序后仍然对应同一个用户。由此带来一个问题，有没有更好的方式实现我这一步所做的内容。</li>
-<li>对name按字母序排序后放在new_name vector中，并去掉相同的人名（unique）,然后对于每一个用户依次判断有效通话记录（通过一个栈，栈空时必须是开始通话状态才能插入，栈不空时当前记录必须是结束通话）</li>
-<li><p>对于没有产生有效账单的用户，无输出，此坑被我踩了。</p>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
-#include &lt;algorithm&gt;
-#include &lt;sstream&gt;
-#include &lt;stack&gt;
-#include &lt;cstdio&gt;
-using namespace std;
-
-//将输入的时间字符串转变成分钟形式，从每月1号0点开始
-int adapter_minute(string&amp; str){
-    return ((stoi(str.substr(3,2))-1)*1440+60*stoi(str.substr(6,2))+stoi(str.substr(9,2)));
-}
-
-//name，status按照record的排序方式同步排序
-void my_sort(vector&lt;string&gt;&amp; name,vector&lt;int&gt;&amp; record,vector&lt;bool&gt;&amp; status){
-    for (int i=0; i&lt;record.size(); ++i) {
-        int min=i;
-        for (int k=i+1; k&lt;record.size(); ++k) {
-            if (record[k]&lt;record[min]) {
-                min=k;
-            }
-        }
-        string temp_name=name[i];
-        int temp_record=record[i];
-        bool temp_status=status[i];
-        name[i]=name[min];
-        name[min]=temp_name;
-        record[i]=record[min];
-        record[min]=temp_record;
-        status[i]=status[min];
-        status[min]=temp_status;
-
-    }
-}
-
-//按题目要求输出时间
-void adapter_time(int time){
-    printf(&quot;%02d:&quot;,time/1440+1);
-    time=time%1440;
-    printf(&quot;%02d:%02d &quot;,time/60,time%60);
-}
-
-//根据通话的起始时间计算费用
-int money(int begin,int end,vector&lt;int&gt;&amp; cost){
-    int money=0;
-    int sequence=(begin/60)%24;
-    int remain=(begin%60)*cost[sequence];
-    begin=(begin/60)*60;
-    int hour=(end-begin)/60;
-    int minute=(end-begin)%60;
-    for (int i=0; i&lt;hour; ++i) {
-        money+=cost[sequence]*60;
-        sequence=(sequence+1)%24;
-    }
-    money+=minute*cost[sequence];
-    money-=remain;
-    return money;
-}
-
-//查询并输出该查询人的账单
-void print_bill(vector&lt;int&gt;&amp; cost,string&amp; query_name,vector&lt;string&gt;&amp; name,vector&lt;int&gt;&amp; record,vector&lt;bool&gt;&amp; status,int month){
-    stack&lt;int&gt; S;
-    int total=0;
-    int flag=0;
-    for(int i=0;i&lt;name.size();++i){
-        if(name[i] == query_name){
-            if(S.empty() &amp;&amp; status[i] == true){
-                S.push(record[i]);
-            }else if(!S.empty() &amp;&amp; status[i] == true){
-                S.pop();
-                S.push(record[i]);
-            }else if(!S.empty() &amp;&amp; status[i] == false){
-                if (flag == 0){
-                    flag=1;
-                    printf(&quot;%s %02d\n&quot;,query_name.c_str(),month);
-                }
-                adapter_time(S.top());
-                adapter_time(record[i]);
-                cout&lt;&lt;record[i]-S.top()&lt;&lt;&quot; $&quot;;
-                int pay=money(S.top(),record[i],cost);
-                total+=pay;
-                printf(&quot;%.2f\n&quot;,pay/100.0);
-                S.pop();
-            }
-        }
-    }
-    //账单不空
-    if (flag) {
-        cout&lt;&lt;&quot;Total amount: $&quot;;
-        printf(&quot;%.2f\n&quot;,total/100.0);
-    }
-}
-
-int main(){
-    vector&lt;int&gt; cost(24,0);
-    for (int i=0; i&lt;24; ++i) {
-        cin&gt;&gt;cost[i];
-    }
-
-    int N=0;
-    cin&gt;&gt;N;
-    if(N == 0 || N == 1) return 0;
-    vector&lt;string&gt; name(N);
-    vector&lt;int&gt; record(N);
-    vector&lt;bool&gt; status(N,0);
-    int month=0;
-    for (int i=0; i&lt;N; ++i) {
-        string str;
-        cin&gt;&gt;name[i];
-        cin&gt;&gt;str;
-        month=stoi(str.substr(0,2));
-        record[i]=adapter_minute(str);
-        cin&gt;&gt;str;
-        if (str == &quot;on-line&quot;) status[i]=1;
-    }
-
-    vector&lt;string&gt; new_name=name;
-    sort(new_name.begin(), new_name.end());
-
-    //自定义的排序，name和status与时间作同等交换
-    my_sort(name,record,status);
-
-    //客户总数
-    int name_num=(int)distance(new_name.begin(),unique(new_name.begin(), new_name.end()));
-    for (int i=0; i&lt;name_num; ++i) {
-            print_bill(cost,new_name[i],name,record,status,month);
-    }
-
-    return 0;
-}
-</code></pre></li>
-</ul>
-
-          
+          PAT甲级 1016 思路总结原题链接
+主要思路
+输入可以按自己的要求改为更简单的形式，此题就把 on-line off-line改为bool类型存储
+每一条电话记录包括用户姓名，时间，状态，我按照时间来进行排序，并同步更新姓名和状态的vector，即最终下标对应的姓名，时间，状态在排序后仍然对应同
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/26/PAT甲级1016/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -839,9 +570,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -942,9 +673,16 @@ int main(){
       
         
           
-            <h2 id="PAT甲级-1015-思路总结"><a href="#PAT甲级-1015-思路总结" class="headerlink" title="PAT甲级 1015 思路总结"></a>PAT甲级 1015 思路总结</h2><p><a href="https://www.patest.cn/contests/pat-a-practise/1015" target="_blank" rel="external">原题链接</a></p>
-<h3 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h3>
+          PAT甲级 1015 思路总结原题链接
+主要思路
           
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/25/PAT甲级1015/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -990,9 +728,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1093,15 +831,17 @@ int main(){
       
         
           
-            <h2 id="电影：手机"><a href="#电影：手机" class="headerlink" title="电影：手机"></a>电影：手机</h2><p>“你的媳妇叫吕桂花，吕桂花让问问你，最近你还回来吗？”</p>
-<p>有些电影过了很多年再看，确实别有一番滋味。就像《手机》，12年前片子上映的时候，手机还是个新鲜事物，左手一个诺基亚右手一个摩托罗拉定是十分骄傲的事情。</p>
-<p>电影当中老夫老妻由于手机带来的情感纠葛和外遇问题我不关心，我想冯小刚也只是拿这个绝对不会错的两性问题作为《手机》的一个切入点。手机不会带来感情的背叛，只是让背叛更容易了，这样感情也就不是感情了。</p>
-<p>还记得应该就是《手机》上映的03年，是我第一次发电子邮件，在圣诞节给一位叔叔发去一封祝福短信，就一句话，祝叔叔节日快乐！三日之后收到回复的那种兴奋感现在都还记得，当时也没有觉得E-mail的出现从此会让邮政的邮箱几乎无处可寻，现在看起来，E-mail固然有它的好处，一封信你随时都可以打开看，只要网易不破产，我那放在网易服务器里的一封封邮件当然也会得以保存下去。但它却没有打开一封纸质信看到熟悉字体就如和对方面对面交谈的感觉。自从这个世界多了E-mail这一条通向远方的道路，另一条传统的通信道路就渐渐没有人走了。</p>
-<p>自从Iphone的出现，手机走向了另一条控制人类的进阶之路（在这里我主动忽略了黑莓和诺基亚早年的智能机），宣告功能机时代的结束，按键基本消失，留下一块冰冷的屏幕，这块冰冷的屏幕可以让你拿来做任何拒绝面对面交流的事情，也可以让你交流好了再面对面做事情。让你疯让你狂，让你疯到狂。</p>
-<p>李敖说上帝给男人的最大惩罚是女人、给女人的是老年、给老年的是年轻、给年轻的是手机、给手机的是 3 月换一款，为新款人人疲于奔命。手机的最大惩罚最后反射到年轻人：牺牲了眼睛、僵化了脖子、变成了碎嘴子和暴露狂。手机帮他们目光如豆，上帝给豆的最大惩罚是放屁。放屁泄露了天机：手机是屁。</p>
-<p>我希望有一天任性地在高速公路随便选个出口下高速，穿过一片小树林，就能看见清澈透底的溪水流过，恰好溪边还有一把长椅，还没来及躺下手机就提示有WLAN网络可供使用，但你却右手一划，关掉了WIFI。惬意地打个屁，听见远方的大队广播里说“你的媳妇叫吕桂花，吕桂花让问问你，最近你还回来吗？”</p>
-
-          
+          电影：手机“你的媳妇叫吕桂花，吕桂花让问问你，最近你还回来吗？”
+有些电影过了很多年再看，确实别有一番滋味。就像《手机》，12年前片子上映的时候，手机还是个新鲜事物，左手一个诺基亚右手一个摩托罗拉定是十分骄傲的事情。
+电影当中老夫老妻由于手机带来的情感纠葛和外遇问题我不关心，我想冯小刚也只是拿这个绝
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/07/关于手机/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1147,9 +887,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1250,12 +990,17 @@ int main(){
       
         
           
-            <h2 id="书名：一网打尽"><a href="#书名：一网打尽" class="headerlink" title="书名：一网打尽"></a>书名：一网打尽</h2><p><img src="https://img3.doubanio.com/lpic/s27132055.jpg" alt=""></p>
-<p>亚马逊起步时仅仅只是一个网上书店，贝佐斯对这个网站的定位也是如此，这就要谈到第一个everything了，贝佐斯的策略是市面上任何一个出版社出的每一本书都要能从亚马逊买到，出版社每出一本新书，亚马逊就要存两本。亚马逊最终也没能做到这一点，但可以买到的书的数量已经远超其它竞争对手。</p>
-<p>当图书业务越做越好之后，亚马逊开始像沃尔玛的方向转变，这就到了第二个everything，贝佐斯想要在亚马逊的仓库放下市面上的所有百货商品，这个方案最终由于成本限制最终也没有实现，现在的亚马逊中国之所以允许第三方卖家的存在，应该也是基于在中国的亚马逊仓库建设还不完善的情况下丰富商品的种类。</p>
-<p>第三个everything就是亚马逊对于从顾客点击购买之后，no，从顾客浏览亚马逊网站开始一直到顾客收到货物，然后到收到货物之后的售后各个环节的优化。前段时间，英语的一个小伙子收到了亚马逊错寄的psp，xbox等几件商品，他联系了亚马逊客服准备归还这些东西，亚马逊的客服直接说就把这些东西送给他了，并向他道歉。亚马逊在这件事情中考虑了起码考虑了以下因素。收回错寄物品的物流成本，发错物品的概率，不收回物品带来的社会影响以及由此带来的销售提升，亚马逊敢把错发物品直接送人，之所以这样做因为它会带来更多的利益。</p>
-
-          
+          书名：一网打尽
+亚马逊起步时仅仅只是一个网上书店，贝佐斯对这个网站的定位也是如此，这就要谈到第一个everything了，贝佐斯的策略是市面上任何一个出版社出的每一本书都要能从亚马逊买到，出版社每出一本新书，亚马逊就要存两本。亚马逊最终也没能做到这一点，但可以买到的书的数量已经远超其它竞争对手。
+当
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/01/05/一网打尽/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1301,9 +1046,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1404,10 +1149,16 @@ int main(){
       
         
           
-            <h2 id="书名：大河奔流的精神"><a href="#书名：大河奔流的精神" class="headerlink" title="书名：大河奔流的精神"></a>书名：大河奔流的精神</h2><p><img src="https://img1.doubanio.com/lpic/s26582959.jpg" alt=""></p>
-<p>老俞的这一系列书我曾经看过一本《从容一生》，风格和大河奔流的精神相似，老俞的书就是这样，都是我们曾经听到过的道理，但是同样的道理让老俞写出来感觉就是不同，老俞在新东方的CEO位置上做了这么多年了，他没有远期的规划，所以他不可能退下来，因为新东方和俞敏洪这三个字是紧密联系在一起的，他就是新东方的符号。老俞想把新东方做成百年企业，去俞敏洪化是必须要做的事情。</p>
-
-          
+          书名：大河奔流的精神
+老俞的这一系列书我曾经看过一本《从容一生》，风格和大河奔流的精神相似，老俞的书就是这样，都是我们曾经听到过的道理，但是同样的道理让老俞写出来感觉就是不同，老俞在新东方的CEO位置上做了这么多年了，他没有远期的规划，所以他不可能退下来，因为新东方和俞敏洪这三个字是紧密联系在一起的
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/05/28/大河奔流的精神/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1453,9 +1204,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1556,14 +1307,17 @@ int main(){
       
         
           
-            <h2 id="书名：乔布斯传"><a href="#书名：乔布斯传" class="headerlink" title="书名：乔布斯传"></a>书名：乔布斯传</h2><p><img src="https://img3.doubanio.com/lpic/s6974202.jpg" alt=""></p>
-<p>老实说，在看乔布斯传之前，我对他的了解还不及我对苹果的了解，包括他去世的时候，微博中满世界的人都在为他的离去而惋惜，但是我那时还不了解他，所以这次才拜读了乔布斯传。</p>
-<p>有人说没有乔布斯就没有图形操作界面，我们不可能如此方便的使用计算机。图形操作系统那个必然是PC的发展趋势，也许没有乔布斯的话，我们不会那么早看到图形界面。</p>
-<p>乔布斯传顾名思义，就是他个人的传记，乔布斯对于用户体验的追求近乎偏执，一个产品，从工业设计到内部电路设计再到软件，每个方面他都是要求互相支持，融为一体，这样的精益求精不是每个人都做得到的。</p>
-<p>另外一个给我印象深刻的就是乔布斯对于微软的看法，他说，微软在鲍尔默的掌管下就是个销售公司，而苹果，是一家改变世界的科技公司，赚钱，不是他们首先考虑的事情。</p>
-<p>另外，关于这句话 Think different，think在此处是名词，不同的思维方式，而不是思考不同。</p>
-
-          
+          书名：乔布斯传
+老实说，在看乔布斯传之前，我对他的了解还不及我对苹果的了解，包括他去世的时候，微博中满世界的人都在为他的离去而惋惜，但是我那时还不了解他，所以这次才拜读了乔布斯传。
+有人说没有乔布斯就没有图形操作界面，我们不可能如此方便的使用计算机。图形操作系统那个必然是PC的发展趋势，也许没有乔布
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/04/22/乔布斯传/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1609,9 +1363,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1712,12 +1466,17 @@ int main(){
       
         
           
-            <h2 id="书名：背包十年"><a href="#书名：背包十年" class="headerlink" title="书名：背包十年"></a>书名：背包十年</h2><p><img src="https://img3.doubanio.com/lpic/s4488835.jpg" alt=""></p>
-<p>背包十年，当我看到这本书的名字，心里就十分羡慕。小鹏在书中详细介绍了自己是如何一步步从菜鸟背包客走上职业旅行者的道路的。我认为，有小鹏自己的坚持，也有机遇的原因。</p>
-<p>正如小鹏自己所说，从2001年到2010年，他打过不同的工，睡过不同的床，遇见不同的人。小鹏几乎看遍了天下有名的美景，但是小鹏说，让他觉得最有价值的，是在不同地方遇见不同的人。也许小鹏遇到的人在他们当地只是一个个普普通通的人，但是对于小鹏，那是一段别样的记忆。</p>
-<p>有梦才有明天，用力就会实现。年轻人，出发吧！</p>
-
-          
+          书名：背包十年
+背包十年，当我看到这本书的名字，心里就十分羡慕。小鹏在书中详细介绍了自己是如何一步步从菜鸟背包客走上职业旅行者的道路的。我认为，有小鹏自己的坚持，也有机遇的原因。
+正如小鹏自己所说，从2001年到2010年，他打过不同的工，睡过不同的床，遇见不同的人。小鹏几乎看遍了天下有名的美景，但
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/04/05/背包十年/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1763,9 +1522,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -1866,13 +1625,17 @@ int main(){
       
         
           
-            <h2 id="书名：人脉关系课"><a href="#书名：人脉关系课" class="headerlink" title="书名：人脉关系课"></a>书名：人脉关系课</h2><p><img src="https://img3.doubanio.com/lpic/s6867555.jpg" alt=""></p>
-<p>在一个朋友的推荐下，知道了曾仕强这个人。清明前在多看买了这本书带在身上，一天就看完了。如果你看过不止一本曾仕强的书你会发现，都是围绕着人伦关系的合理来说。</p>
-<p>曾仕强的这本书带给我最大的改变就是不能完全否定传统中国伦理观念中的合理性，何谓中庸？中庸难道就是要你做任何事的时候都要中规中矩，永远不会拥有出人头地之日吗？其实不是的，中庸就是要做到人伦关系中的合理，任何事，应该要合理地去做。</p>
-<p>想要拥有好的人际关系当然需要人际交往，找关系此乃中国的人之常情，完全摒弃这种做法不是明智之举。</p>
-<p>这本书让我对中国的传统文化观念有了一个新的认识，任何事物，有好有坏，辩证地去看就合理了。</p>
-
-          
+          书名：人脉关系课
+在一个朋友的推荐下，知道了曾仕强这个人。清明前在多看买了这本书带在身上，一天就看完了。如果你看过不止一本曾仕强的书你会发现，都是围绕着人伦关系的合理来说。
+曾仕强的这本书带给我最大的改变就是不能完全否定传统中国伦理观念中的合理性，何谓中庸？中庸难道就是要你做任何事的时候都要中规中矩
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/04/05/人脉关系课/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1918,9 +1681,9 @@ int main(){
   </span>
 
   <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="三米的博客">
+    <meta itemprop="name" content="Hexo">
     <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="三米的博客" src="">
+      <img style="display:none;" itemprop="url image" alt="Hexo" src="">
     </span>
   </span>
 
@@ -2021,13 +1784,16 @@ int main(){
       
         
           
-            <h2 id="书名：少有人走的路"><a href="#书名：少有人走的路" class="headerlink" title="书名：少有人走的路"></a>书名：少有人走的路</h2><p><img src="https://img3.doubanio.com/lpic/s2144391.jpg" alt=""></p>
-<p>畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句话。</p>
-<p>我越来越相信，我们具有爱的能力和成长意愿不仅取决于童年时父母爱的滋养，也取决于我们一生中对潜意识的体会，即潜意识给予我们的爱的滋养。</p>
-<p>潜意识的雨露滋润每一个人，人人都可以公平地分享到属于自己的部分，只是大多数人拒绝潜意识的召唤，不理睬潜意识伸出的双手罢了。</p>
-<p>病人的反应和举动往往是有意抵制健康的恢复，原因何在？简单而言，原因就在于我们懒惰的天性，也就是说，我们体内都含有熵的原罪成分。熵，促使我们故意对抗治疗疾病的力量，使我们得过且过，而不想耗费任何力气，我们只想维持当前的生存状态。<br>即使看完这本书，每一个人可能都有不一样的改变。</p>
-
-          
+          书名：少有人走的路
+畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句
+          ...
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/04/03/少有人走的路/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
