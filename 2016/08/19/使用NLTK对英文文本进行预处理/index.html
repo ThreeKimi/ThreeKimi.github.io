@@ -84,24 +84,49 @@
 
 
 
-<meta name="description" content="书名：少有人走的路
-畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句话。
-我越来越相信，我们具有爱的能力和成长意愿不仅取决于童年时父母爱的滋养，也取决于我们一生中对潜意">
+<meta name="description" content="使用NLTK对于英文txt的文本预处理，包括了去标点符号，提取词干，去停用词等过程
+# -*- coding:utf8 -*-
+import nltk
+import os
+import string
+import re
+import sys
+import glob
+import time
+from nltk.stem import WordNetLemmatizer
+
+start=time.cl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="心智成熟的道路上必须要对抗自己的原罪成分">
-<meta property="og:url" content="http://yoursite.com/2013/04/03/少有人走的路/index.html">
+<meta property="og:title" content="使用NLTK对英文文本进行预处理">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/使用NLTK对英文文本进行预处理/index.html">
 <meta property="og:site_name" content="三米的博客">
-<meta property="og:description" content="书名：少有人走的路
-畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句话。
-我越来越相信，我们具有爱的能力和成长意愿不仅取决于童年时父母爱的滋养，也取决于我们一生中对潜意">
-<meta property="og:image" content="https://img3.doubanio.com/lpic/s2144391.jpg">
-<meta property="og:updated_time" content="2016-08-09T12:04:59.000Z">
+<meta property="og:description" content="使用NLTK对于英文txt的文本预处理，包括了去标点符号，提取词干，去停用词等过程
+# -*- coding:utf8 -*-
+import nltk
+import os
+import string
+import re
+import sys
+import glob
+import time
+from nltk.stem import WordNetLemmatizer
+
+start=time.cl">
+<meta property="og:updated_time" content="2016-12-25T11:43:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="心智成熟的道路上必须要对抗自己的原罪成分">
-<meta name="twitter:description" content="书名：少有人走的路
-畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句话。
-我越来越相信，我们具有爱的能力和成长意愿不仅取决于童年时父母爱的滋养，也取决于我们一生中对潜意">
-<meta name="twitter:image" content="https://img3.doubanio.com/lpic/s2144391.jpg">
+<meta name="twitter:title" content="使用NLTK对英文文本进行预处理">
+<meta name="twitter:description" content="使用NLTK对于英文txt的文本预处理，包括了去标点符号，提取词干，去停用词等过程
+# -*- coding:utf8 -*-
+import nltk
+import os
+import string
+import re
+import sys
+import glob
+import time
+from nltk.stem import WordNetLemmatizer
+
+start=time.cl">
 
 
 
@@ -129,13 +154,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2013/04/03/少有人走的路/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/08/19/使用NLTK对英文文本进行预处理/"/>
 
 
 
 
 
-  <title> 心智成熟的道路上必须要对抗自己的原罪成分 | 三米的博客 </title>
+  <title> 使用NLTK对英文文本进行预处理 | 三米的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -248,7 +273,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2013/04/03/少有人走的路/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/19/使用NLTK对英文文本进行预处理/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="三米">
@@ -272,7 +297,7 @@
             
             
               
-                心智成熟的道路上必须要对抗自己的原罪成分
+                使用NLTK对英文文本进行预处理
               
             
           </h1>
@@ -287,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2013-04-03T22:01:07+08:00">
-                2013-04-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-19T11:23:51+08:00">
+                2016-08-19
               </time>
             
 
@@ -310,8 +335,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/读书/" itemprop="url" rel="index">
-                    <span itemprop="name">读书</span>
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
                   </a>
                 </span>
 
@@ -328,8 +353,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2013/04/03/少有人走的路/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/04/03/少有人走的路/" itemprop="commentCount"></span>
+                <a href="/2016/08/19/使用NLTK对英文文本进行预处理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/19/使用NLTK对英文文本进行预处理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,11 +380,60 @@
       
 
       
-        <h2 id="书名：少有人走的路"><a href="#书名：少有人走的路" class="headerlink" title="书名：少有人走的路"></a>书名：少有人走的路</h2><p><img src="https://img3.doubanio.com/lpic/s2144391.jpg" alt=""></p>
-<p>畅销20年的书，绝不是吹嘘，一定有它的道理，清明三天假期，看完了三本书，这是第三本书。看这本书绝不是一段非常愉快的历程，因为你要在阅读的过程中反思自己的情况，看看自己是不是有书中例子中人物的问题。因为有了Kindle，所以阅读越来越方便了。下面是我从书中摘录出的我认为最重要的几句话。</p>
-<p>我越来越相信，我们具有爱的能力和成长意愿不仅取决于童年时父母爱的滋养，也取决于我们一生中对潜意识的体会，即潜意识给予我们的爱的滋养。</p>
-<p>潜意识的雨露滋润每一个人，人人都可以公平地分享到属于自己的部分，只是大多数人拒绝潜意识的召唤，不理睬潜意识伸出的双手罢了。</p>
-<p>病人的反应和举动往往是有意抵制健康的恢复，原因何在？简单而言，原因就在于我们懒惰的天性，也就是说，我们体内都含有熵的原罪成分。熵，促使我们故意对抗治疗疾病的力量，使我们得过且过，而不想耗费任何力气，我们只想维持当前的生存状态。<br>即使看完这本书，每一个人可能都有不一样的改变。</p>
+        <ul>
+<li><p>使用NLTK对于英文txt的文本预处理，包括了去标点符号，提取词干，去停用词等过程</p>
+<pre><code># -*- coding:utf8 -*-
+import nltk
+import os
+import string
+import re
+import sys
+import glob
+import time
+from nltk.stem import WordNetLemmatizer
+
+start=time.clock()
+
+wordEngStop = nltk.corpus.stopwords.words(&apos;english&apos;)
+english_punctuations = [&apos;.&apos;, &apos;:&apos;, &apos;;&apos;, &apos;?&apos;, &apos;(&apos;, &apos;)&apos;, &apos;[&apos;, &apos;]&apos;, &apos;!&apos;, &apos;@&apos;, &apos;#&apos;, &apos;%&apos;, &apos;$&apos;, &apos;*&apos;,&apos;=&apos;,&apos;abstract=&apos;, &apos;{&apos;, &apos;}&apos;]
+porterStem=nltk.stem.PorterStemmer()
+lancasterStem=nltk.stem.lancaster.LancasterStemmer()
+lemmatizer = WordNetLemmatizer() #WordNetLemmatizer方法提取词干
+
+dir=&apos;/Users/If/Desktop/chinese&apos;
+fout = open(&apos;/Users/If/Desktop/test1.txt&apos;,&apos;w&apos;)
+
+delEStr = string.punctuation +string.digits
+identify = string.maketrans(&apos;&apos;, &apos;&apos;)
+
+for txtFile in glob.glob(os.path.join(dir, &quot;*.txt&quot;)):
+    print txtFile
+    str1=&apos;&apos;
+    str1=filter(str.isdigit, txtFile)
+    fin = open(txtFile, &quot;rb&quot;)
+    fout.write(str1.encode(&apos;utf-8&apos;))
+    fout.write(&apos; &apos;)
+    for eachLine in fin:
+
+    eachLine = eachLine.translate(identify,delEStr)
+    eachLine = eachLine.lower().decode(&apos;utf-8&apos;, &apos;ignore&apos;)  # 小写
+    #print eachLine
+    tokens = nltk.word_tokenize(eachLine)                 #分词（与标点分开）
+    #print tokens
+    wordLine = &apos;&apos;
+    for word in tokens:
+        if not word in english_punctuations:          #去标点
+            if not word in wordEngStop:          #去停用词
+                if len(word)&gt;3:
+                    wordLine =wordLine+word+&apos; &apos;
+    fout.write(wordLine.encode(&apos;utf-8&apos;))
+fout.write(&apos;\n&apos;)
+
+fout.close()
+end=time.clock()
+print(&apos;Running time: %s Seconds&apos;%(end-start))
+</code></pre></li>
+</ul>
 
       
     </div>
@@ -386,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/03/24/Facebook效应/" rel="next" title="扎克伯格的专注造就了现在的Facebook">
-                <i class="fa fa-chevron-left"></i> 扎克伯格的专注造就了现在的Facebook
+              <a href="/2016/04/17/PAT 06-图2 Saving James Bond - Easy Version/" rel="next" title="PAT 06-图1 列出连通集">
+                <i class="fa fa-chevron-left"></i> PAT 06-图1 列出连通集
               </a>
             
           </div>
@@ -396,8 +470,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2013/04/05/人脉关系课/" rel="prev" title="曾仕强的人伦关系解释">
-                曾仕强的人伦关系解释 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/21/生成PLSA词频矩阵C++版/" rel="prev" title="生成PLSA词频矩阵C++版">
+                生成PLSA词频矩阵C++版 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -424,8 +498,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2013/04/03/少有人走的路/"
-           data-title="心智成熟的道路上必须要对抗自己的原罪成分" data-url="http://yoursite.com/2013/04/03/少有人走的路/">
+      <div class="ds-thread" data-thread-key="2016/08/19/使用NLTK对英文文本进行预处理/"
+           data-title="使用NLTK对英文文本进行预处理" data-url="http://yoursite.com/2016/08/19/使用NLTK对英文文本进行预处理/">
       </div>
     
   </div>
@@ -449,17 +523,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/Wechat1.png"
@@ -508,22 +573,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#书名：少有人走的路"><span class="nav-number">1.</span> <span class="nav-text">书名：少有人走的路</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
     </div>
