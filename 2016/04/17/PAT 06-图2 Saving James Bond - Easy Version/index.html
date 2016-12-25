@@ -84,28 +84,43 @@
 
 
 
-<meta name="description" content="PAT 06-图2 Saving James Bond - Easy Version主要思路1、深度优先遍历图，没到达新结点，判断能否从当前结点一步跳到安全区域2、图中两点间有边的条件是小于bond能跳的半径3、第一步Bond跳动的距离可以视为加上15（小岛半径）
+<meta name="description" content="PAT  06-图1 列出连通集主要思路1、邻接矩阵存储图2、深度优先遍历图与广度优先遍历图的方法
 #include &amp;lt;iostream&amp;gt;  
 #include &amp;lt;vector&amp;gt;  
+#include &amp;lt;queue&amp;gt;  
+using namespace std;  
 
-using namesp">
+#define MaxNode 10  
+
+typedef struct  
+{">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PAT 06-图2 Saving James Bond - Easy Version">
+<meta property="og:title" content="PAT 06-图1 列出连通集">
 <meta property="og:url" content="http://yoursite.com/2016/04/17/PAT 06-图2 Saving James Bond - Easy Version/index.html">
 <meta property="og:site_name" content="三米的博客">
-<meta property="og:description" content="PAT 06-图2 Saving James Bond - Easy Version主要思路1、深度优先遍历图，没到达新结点，判断能否从当前结点一步跳到安全区域2、图中两点间有边的条件是小于bond能跳的半径3、第一步Bond跳动的距离可以视为加上15（小岛半径）
+<meta property="og:description" content="PAT  06-图1 列出连通集主要思路1、邻接矩阵存储图2、深度优先遍历图与广度优先遍历图的方法
 #include &amp;lt;iostream&amp;gt;  
 #include &amp;lt;vector&amp;gt;  
+#include &amp;lt;queue&amp;gt;  
+using namespace std;  
 
-using namesp">
-<meta property="og:updated_time" content="2016-12-25T08:42:22.000Z">
+#define MaxNode 10  
+
+typedef struct  
+{">
+<meta property="og:updated_time" content="2016-12-25T08:46:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PAT 06-图2 Saving James Bond - Easy Version">
-<meta name="twitter:description" content="PAT 06-图2 Saving James Bond - Easy Version主要思路1、深度优先遍历图，没到达新结点，判断能否从当前结点一步跳到安全区域2、图中两点间有边的条件是小于bond能跳的半径3、第一步Bond跳动的距离可以视为加上15（小岛半径）
+<meta name="twitter:title" content="PAT 06-图1 列出连通集">
+<meta name="twitter:description" content="PAT  06-图1 列出连通集主要思路1、邻接矩阵存储图2、深度优先遍历图与广度优先遍历图的方法
 #include &amp;lt;iostream&amp;gt;  
 #include &amp;lt;vector&amp;gt;  
+#include &amp;lt;queue&amp;gt;  
+using namespace std;  
 
-using namesp">
+#define MaxNode 10  
+
+typedef struct  
+{">
 
 
 
@@ -139,7 +154,7 @@ using namesp">
 
 
 
-  <title> PAT 06-图2 Saving James Bond - Easy Version | 三米的博客 </title>
+  <title> PAT 06-图1 列出连通集 | 三米的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -276,7 +291,7 @@ using namesp">
             
             
               
-                PAT 06-图2 Saving James Bond - Easy Version
+                PAT 06-图1 列出连通集
               
             
           </h1>
@@ -291,7 +306,7 @@ using namesp">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-17T11:24:14+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-17T11:16:14+08:00">
                 2016-04-17
               </time>
             
@@ -359,96 +374,104 @@ using namesp">
       
 
       
-        <h2 id="PAT-06-图2-Saving-James-Bond-Easy-Version"><a href="#PAT-06-图2-Saving-James-Bond-Easy-Version" class="headerlink" title="PAT 06-图2 Saving James Bond - Easy Version"></a>PAT 06-图2 Saving James Bond - Easy Version</h2><h3 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h3><p>1、深度优先遍历图，没到达新结点，判断能否从当前结点一步跳到安全区域<br>2、图中两点间有边的条件是小于bond能跳的半径<br>3、第一步Bond跳动的距离可以视为加上15（小岛半径）</p>
+        <h2 id="PAT-06-图1-列出连通集"><a href="#PAT-06-图1-列出连通集" class="headerlink" title="PAT  06-图1 列出连通集"></a>PAT  06-图1 列出连通集</h2><h3 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h3><p>1、邻接矩阵存储图<br>2、深度优先遍历图与广度优先遍历图的方法</p>
 <pre><code>#include &lt;iostream&gt;  
 #include &lt;vector&gt;  
-
+#include &lt;queue&gt;  
 using namespace std;  
 
-bool distance(vector&lt;vector&lt;int&gt; &gt; &amp;vec,int node,int i,int D)//是否能从node点跳到i点  
+#define MaxNode 10  
+
+typedef struct  
 {  
-    int distance_x=vec[node][0]-vec[i][0];  
-    int distance_y=vec[node][1]-vec[node][1];  
-    if ((distance_x*distance_x+distance_y*distance_y)&lt;=D*D)  
-    {  
-        return true;  
-    }else  
-    {  
-        return false;  
-    }  
-}  
+    int value[MaxNode][MaxNode];  
+    int N;  
+    int M;  
+}Graph;  
 
-bool safe(vector&lt;vector&lt;int&gt; &gt; &amp;vec,int node,int D)//当前node点是否能一步跳到安全区域  
-{  
-    int x=vec[node][0];  
-    int y=vec[node][1];  
-    if (x&gt;= 50-D || x&lt;=-50+D || y&gt;=50-D || y&lt;=-50+D)  
-    {  
-        return true;  
-    }else  
-    {  
-        return false;  
-    }  
-
-}  
-
-bool DFS(vector&lt;vector&lt;int&gt; &gt; &amp;vec,int node,vector&lt;int&gt; &amp;flag,int N,int D)//深度优先遍历图  
+void DFS(vector&lt;int&gt; &amp;flag,Graph &amp;G,int node)//图的深度优先遍历  
 {  
     flag[node]=1;  
-    if (safe(vec, node, D))  
+    cout&lt;&lt;&quot; &quot;&lt;&lt;node;  
+    for (int i=0; i&lt;G.N; ++i)  
     {  
-        return true;  
-    }  
-    for (int i=1; i&lt;=N; ++i)  
-    {  
-        if (distance(vec, node,i,D) &amp;&amp; flag[i]==0)  
+        if (G.value[node][i]==1 &amp;&amp; flag[i]==0)  
         {  
-             return DFS(vec, i, flag, N, D);  
+            DFS(flag,G,i);  
         }  
     }  
-    return false;  
+}  
+
+void BFS(vector&lt;int&gt; &amp;flag,queue&lt;int&gt; &amp;Q,Graph &amp;G,int node)//图的广度优先遍历  
+{  
+
+    flag[node]=1;  
+    Q.push(node);  
+    int temp=0;  
+    while (!Q.empty())  
+    {  
+        temp=Q.front();  
+        cout&lt;&lt;&quot; &quot;&lt;&lt;temp;  
+        Q.pop();  
+        for (int i=0; i&lt;G.N; ++i)  
+        {  
+            if (G.value[temp][i]==1 &amp;&amp; flag[i]==0)  
+            {  
+                Q.push(i);  
+                flag[i]=1;  
+            }  
+        }  
+    }  
 }  
 
 int main()  
 {  
-    int N=0,D=0;  
-    cin&gt;&gt;N&gt;&gt;D;  
+    //Get the input  
+    int N=0,M=0;  
+    cin&gt;&gt;N&gt;&gt;M;  
+    Graph G;  
+    G.N=N;  
+    G.M=M;  
 
-    if (D&gt;=50-15)  
+    int x=0,y=0;  
+    for (int i=0; i&lt;N; ++i)//初始化图的邻接矩阵  
     {  
-        cout&lt;&lt;&quot;Yes&quot;;  
-    }else  
-    {  
-
-    vector&lt;vector&lt;int&gt; &gt; position(N+1,vector&lt;int&gt;(2));  
-    for (int i=1; i&lt;=N; ++i)  
-    {  
-        cin&gt;&gt;position[i][0]&gt;&gt;position[i][1];  
-    }  
-    position[0][0]=0;  
-    position[0][1]=0;  
-    vector&lt;int&gt; flag(N+1,0);  
-    int flag_result=0;  
-    for (int i=1; i&lt;=N; ++i)  
-    {  
-        if (distance(position, i,0,D+15))//岛的半径15，可以视为Bond从岛中心点跳出的第一步有长度15的能力值增加  
-        {  
-            if(DFS(position, i, flag, N, D))  
-            {  
-                flag_result=1;  
-                break;  
-            }  
+        for (int k=0; k&lt;N; ++k) {  
+            G.value[i][k]=0;  
         }  
     }  
-    if (flag_result)  
+    for (int i=0; i&lt;M; ++i)//修改图的邻接矩阵  
     {  
-        cout&lt;&lt;&quot;Yes&quot;;  
-    }else  
-    {  
-        cout&lt;&lt;&quot;No&quot;;  
+        cin&gt;&gt;x&gt;&gt;y;  
+        G.value[x][y]=1;  
+        G.value[y][x]=1;  
     }  
 
+    //根据深度优先遍历输出图的联通集团  
+    vector&lt;int&gt; flag(N,0);//结点是否被访问的标记向量  
+    for (int i=0; i&lt;N; ++i)  
+    {  
+        if (flag[i]==0)  
+        {  
+            cout&lt;&lt;&quot;{&quot;;  
+            DFS(flag,G,i);  
+            cout&lt;&lt;&quot; }&quot;&lt;&lt;endl;  
+        }  
     }  
+
+    //根据广度优先遍历输出图的联通集团  
+    vector&lt;int&gt; flag1(N,0);//结点是否被访问的标记向量  
+    queue&lt;int&gt; Q;  
+    for (int i=0; i&lt;N; ++i)  
+    {  
+        if (flag1[i]==0)  
+        {  
+            cout&lt;&lt;&quot;{&quot;;  
+            BFS(flag1,Q,G,i);  
+            cout&lt;&lt;&quot; }&quot;&lt;&lt;endl;  
+        }  
+    }  
+
 }  
 </code></pre>
       
@@ -486,8 +509,8 @@ int main()
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/25/PAT甲级1014/" rel="prev" title="PAT甲级1014 Waiting in Line">
-                PAT甲级1014 Waiting in Line <i class="fa fa-chevron-right"></i>
+              <a href="/2016/04/17/PAT 06-图1 列出连通集 /" rel="prev" title="PAT 06-图1 列出连通集">
+                PAT 06-图1 列出连通集 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -515,7 +538,7 @@ int main()
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/04/17/PAT 06-图2 Saving James Bond - Easy Version/"
-           data-title="PAT 06-图2 Saving James Bond - Easy Version" data-url="http://yoursite.com/2016/04/17/PAT 06-图2 Saving James Bond - Easy Version/">
+           data-title="PAT 06-图1 列出连通集" data-url="http://yoursite.com/2016/04/17/PAT 06-图2 Saving James Bond - Easy Version/">
       </div>
     
   </div>
@@ -562,7 +585,7 @@ int main()
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -608,7 +631,7 @@ int main()
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PAT-06-图2-Saving-James-Bond-Easy-Version"><span class="nav-number">1.</span> <span class="nav-text">PAT 06-图2 Saving James Bond - Easy Version</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要思路"><span class="nav-number">1.1.</span> <span class="nav-text">主要思路</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PAT-06-图1-列出连通集"><span class="nav-number">1.</span> <span class="nav-text">PAT  06-图1 列出连通集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要思路"><span class="nav-number">1.1.</span> <span class="nav-text">主要思路</span></a></li></ol></li></ol></div>
             
 
           </div>
